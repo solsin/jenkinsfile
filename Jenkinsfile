@@ -1,28 +1,36 @@
 @Library('common-lib') import solsin.*
 
 pipeline {
-    agent any
+  agent any
+  
+  stages {
+      stage('Build') {
+        steps {
+          echo 'Building..'
+          echo "Selected TAG: ${GIT_TAG}"
+          if (GIT_TAG == "master") {
+            GIT_TAG = sh(
+              script: "git tag -l --sort=-v:refname dev/*/bo* | head -n 1",
+              returnStdout: true
+            ).trim()
+            echo "get latest tag: ${GIT_TAG}"
+          }
 
-    stages {
-        stage('Build') {
-            steps {
-                echo 'Building..'
-                echo "Selected TAG: ${GIT_TAG}"
-                script {
-                    def common = new Common()
-                    //common.checkoutSCM('master', 'dev')
-                }                
-            }
+          script {
+              def common = new Common()
+              //common.checkoutSCM('master', 'dev')
+          }                
         }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
+      }
+      stage('Test') {
+        steps {
+            echo 'Testing..'
         }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
-            }
+      }
+      stage('Deploy') {
+        steps {
+            echo 'Deploying....'
         }
-    }
+      }
+  }
 }
