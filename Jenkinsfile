@@ -5,18 +5,17 @@ pipeline {
   
   stages {
       stage('Build') {
-        echo 'Building..'
-        echo "Selected TAG: ${GIT_TAG}"
-        if (GIT_TAG == "master") {
-          GIT_TAG = sh(
-            script: "git tag -l --sort=-v:refname dev/*/bo* | head -n 1",
-            returnStdout: true
-          ).trim()
-          echo "get latest tag: ${GIT_TAG}"
-        }
-        
         steps {
           script {
+            echo 'Building..'
+            echo "Selected TAG: ${GIT_TAG}"
+            if (GIT_TAG == "master") {
+              GIT_TAG = sh(
+                script: "git tag -l --sort=-v:refname dev/*/bo* | head -n 1",
+                returnStdout: true
+              ).trim()
+              echo "get latest tag: ${GIT_TAG}"
+            }
               def common = new Common()
               //common.checkoutSCM('master', 'dev')
           }                
