@@ -4,24 +4,32 @@ pipeline {
   agent any
   
   stages {
-      stage('Build') {
+      stage('checkout') {
         steps {
           script {
             echo 'Building..'
             echo "Selected TAG: ${GIT_TAG}"
             
-            if (GIT_TAG == "master") {
-              // dev tag중 가장 마지막 tag 선택
-              GIT_TAG = sh(
-                script: "git tag -l --sort=-v:refname dev/*/bo* | head -n 1",
-                returnStdout: true
-              ).trim()
-              echo "get latest tag: ${GIT_TAG}"
-            }
-
             def common = new Common()
-            common.checkoutWithTag(GIT_BRANCH, GIT_TAG)
+            if (ENV_NAME == "dev") {
+              common.checkoutWithTag(GIT_HOST, "master", JOB_NAME)                  
+            } else if (ENV_NAME == "dev") {
+              if (GIT_TAG == "master") {
+                // dev tag중 가장 마지막 tag 선택
+                GIT_TAG = sh(
+                  script: "git tag -l --sort=-v:refname dev/*/bo* | head -n 1",
+                  returnStdout: true
+                ).trim()
+                echo "get latest tag: ${GIT_TAG}"
+              }
+              common.checkoutWithTag(GIT_HOST, GIT_BRANCH, GIT_TAG)
+            }
           }                
+        }
+      }
+      stage('Build') {
+        steps {
+            echo 'Build..'
         }
       }
       stage('Test') {
