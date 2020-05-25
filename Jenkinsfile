@@ -11,7 +11,7 @@ pipeline {
             
             def common = new Common()
             if (ENV_NAME == "dev") {
-              common.checkoutWithTag(GIT_HOST, "master", JOB_NAME)                  
+              common.checkoutBranch(GIT_HOST, "master", JOB_NAME)                  
             } else if (ENV_NAME == "stg") {
               echo "Selected TAG: ${GIT_TAG}"
               if (GIT_TAG == "master") {
