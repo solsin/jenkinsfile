@@ -11,6 +11,7 @@ def checkoutBranch(String gitHost, String branch, jobName) {
   withCredentials([
       usernamePassword(credentialsId: GIT_CREDENTIAL, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
   ]) {
+      USERNAME = USERNAME.replaceAll("@", "%40")
       sh "git push https://${USERNAME}:${PASSWORD}@${gitHost} --tags"
   }
 }
@@ -57,6 +58,7 @@ def checkoutWithTag(String gitHost, String specificBranch, String tag) {
   withCredentials([
       usernamePassword(credentialsId: GIT_CREDENTIAL, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
   ]) {
+      USERNAME = USERNAME.replaceAll("@", "%40")
       sh "git push https://${USERNAME}:${PASSWORD}@${gitHost} --set-upstream origin"
   }
 }
