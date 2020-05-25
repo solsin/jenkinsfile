@@ -18,10 +18,9 @@ pipeline {
               ).trim()
               echo "get latest tag: ${GIT_TAG}"
             }
-            
-            
+
             def common = new Common()
-            common.checkoutSCM('master', 'dev')
+            common.checkoutWithTag(GIT_BRANCH, GIT_TAG)
           }                
         }
       }
