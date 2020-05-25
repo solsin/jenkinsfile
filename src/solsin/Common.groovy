@@ -24,7 +24,7 @@ def checkoutWithTag(String specificBranch, String tag) {
     // specificBranch가 빈값인 경우 tag에 해당하는 branch가 존재하지 않으면 새로 생성하고 있으면 그걸 그대로 사용한다.
     def newBranchName = tag
     if (tag.startsWith("dev/")) {
-      newBranchName = "stg/"+tag.substring(4, tag.length)
+      newBranchName = "stg/"+tag.substring(4, tag.length())
     }
 
     EXISTING_BRANCH = sh(
