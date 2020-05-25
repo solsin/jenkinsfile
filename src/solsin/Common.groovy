@@ -15,7 +15,7 @@ def checkoutBranch(String gitHost, String branch, jobName) {
   }
 }
 
-def checkoutWithTag(String specificBranch, String tag) {
+def checkoutWithTag(String gitHost, String specificBranch, String tag) {
   def branchName = ""
   if (specificBranch == null || specificBranch.length() == 0) {
     // specificBranch가 빈값이 아닌 경우 해당 브랜치로 checkout을 받는다
