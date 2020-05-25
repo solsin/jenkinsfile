@@ -27,12 +27,16 @@ def checkoutWithTag(String specificBranch, String tag) {
       newBranchName = "stg/"+tag.substring(4, tag.length())
     }
 
-    EXISTING_BRANCH = sh(
+    EXISTING_REMOTE_BRANCH = sh(
       script: "git branch -r --list origin/${newBranchName}",
       returnStdout: true
     ).trim()
+    EXISTING_LOCAL_BRANCH = sh(
+      script: "git branch --list ${newBranchName}",
+      returnStdout: true
+    ).trim()
     
-    if (EXISTING_BRANCH.length() == 0) {
+    if (EXISTING_LOCAL_BRANCH.length() == 0) {
       //create local branch
       sh "git checkout -b ${newBranchName} ${tag}"                                
     } else {
