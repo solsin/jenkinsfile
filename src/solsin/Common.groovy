@@ -26,7 +26,9 @@ def checkoutWithTag(String specificBranch, String tag) {
     if (tag.startsWith("dev/")) {
       newBranchName = "stg/"+tag.substring(4, tag.length())
     }
-
+    
+    sh "git fetch --all"
+    
     EXISTING_REMOTE_BRANCH = sh(
       script: "git branch -r --list origin/${newBranchName}",
       returnStdout: true
@@ -36,12 +38,20 @@ def checkoutWithTag(String specificBranch, String tag) {
       returnStdout: true
     ).trim()
     
-    if (EXISTING_LOCAL_BRANCH.length() == 0) {
-      //create local branch
-      sh "git checkout -b ${newBranchName} ${tag}"
-    } else {
-      git branch: newBranchName, credentialsId: 'glyde-codecommit-admin', url: 'https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/glyde-mall-develop'
-    }
+    if (EXISTING_LOCAL_BRANCH.length() == 0 && EXISTING_REMOTE_BRANCH.length() == 0) {
+      //create local branch from dev tag
+      sh "git checkout -b ${newBranchName} ${tag}"      
+    } else if (EXISTING_LOCAL_BRANCH.length() == 0 && EXISTING_REMOTE_BRANCH.length() > 0) {
+      //create local branch from remote branch
+      sh "git checkout -b ${newBranchName} ${EXISTING_REMOTE_BRANCH}"
+    } else if (EXISTING_LOCAL_BRANCH.length()) {
+      // using local branch
+      sh "git checkout ${newBranchName}"
+    }    
+    
+    // else {
+    //  git branch: newBranchName, credentialsId: 'glyde-codecommit-admin', url: 'https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/glyde-mall-develop'
+    //}
   }
 
   withCredentials([
