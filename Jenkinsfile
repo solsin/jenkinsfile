@@ -7,13 +7,13 @@ pipeline {
       stage('checkout') {
         steps {
           script {
-            echo 'Building..'
-            echo "Selected TAG: ${GIT_TAG}"
+            echo 'Checkout..'
             
             def common = new Common()
             if (ENV_NAME == "dev") {
               common.checkoutWithTag(GIT_HOST, "master", JOB_NAME)                  
             } else if (ENV_NAME == "stg") {
+              echo "Selected TAG: ${GIT_TAG}"
               if (GIT_TAG == "master") {
                 // dev tag중 가장 마지막 tag 선택
                 GIT_TAG = sh(
