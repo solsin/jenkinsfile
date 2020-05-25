@@ -3,7 +3,7 @@ package solsin
 
 def checkoutBranch(String gitHost, String branch, jobName) {
   def timeStamp = Calendar.getInstance().getTime().format('YYYY/MM/dd',TimeZone.getTimeZone('CST'))
-  def VERSION_NUMBER = timeStamp+"/${jobName}/"+currentBuild.number
+  def VERSION_NUMBER = "dev/"+timeStamp+"/${jobName}-"+currentBuild.number
   echo VERSION_NUMBER
     
 	git branch: branch, credentialsId: GIT_CREDENTIAL, url: 'https://'+gitHost
