@@ -6,10 +6,10 @@ def checkoutBranch(String gitHost, String branch, jobName) {
   def VERSION_NUMBER = timeStamp+"/${jobName}/"+currentBuild.number
   echo VERSION_NUMBER
     
-	git branch: branch, credentialsId: 'glyde-codecommit-admin', url: 'https://'+gitHost
+	git branch: branch, credentialsId: GIT_CREDENTIAL, url: 'https://'+gitHost
 	sh "git tag -a ${VERSION_NUMBER} -m 'tagged by jenkins'"
   withCredentials([
-      usernamePassword(credentialsId: 'glyde-codecommit-admin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
+      usernamePassword(credentialsId: GIT_CREDENTIAL, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
   ]) {
       sh "git push https://${USERNAME}:${PASSWORD}@${gitHost} --tags"
   }
@@ -19,7 +19,7 @@ def checkoutWithTag(String gitHost, String specificBranch, String tag) {
   def branchName = ""
   if (specificBranch == null || specificBranch.length() == 0) {
     // specificBranch가 빈값이 아닌 경우 해당 브랜치로 checkout을 받는다
-    git branch: specificBranch, credentialsId: 'glyde-codecommit-admin', url: 'https://'+gitHost                        
+    git branch: specificBranch, credentialsId: GIT_CREDENTIAL, url: 'https://'+gitHost                        
   } else {
     // specificBranch가 빈값인 경우 tag에 해당하는 branch가 존재하지 않으면 새로 생성하고 있으면 그걸 그대로 사용한다.
     def newBranchName = tag
@@ -55,7 +55,7 @@ def checkoutWithTag(String gitHost, String specificBranch, String tag) {
   }
 
   withCredentials([
-      usernamePassword(credentialsId: 'glyde-codecommit-admin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
+      usernamePassword(credentialsId: GIT_CREDENTIAL, usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')
   ]) {
       sh "git push https://${USERNAME}:${PASSWORD}@${gitHost} --set-upstream origin"
   }
