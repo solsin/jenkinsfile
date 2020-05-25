@@ -38,9 +38,9 @@ def checkoutWithTag(String specificBranch, String tag) {
     
     if (EXISTING_LOCAL_BRANCH.length() == 0) {
       //create local branch
-      sh "git checkout -b ${newBranchName} ${tag}"                                
+      sh "git checkout -b ${newBranchName} ${tag}"
     } else {
-      git branch: EXISTING_BRANCH, credentialsId: 'glyde-codecommit-admin', url: 'https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/glyde-mall-develop'
+      git branch: newBranchName, credentialsId: 'glyde-codecommit-admin', url: 'https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/glyde-mall-develop'
     }
   }
 
