@@ -13,7 +13,7 @@ pipeline {
             def common = new Common()
             if (ENV_NAME == "dev") {
               common.checkoutWithTag(GIT_HOST, "master", JOB_NAME)                  
-            } else if (ENV_NAME == "dev") {
+            } else if (ENV_NAME == "stg") {
               if (GIT_TAG == "master") {
                 // dev tag중 가장 마지막 tag 선택
                 GIT_TAG = sh(
